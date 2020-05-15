@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::resource('Vehiculo','VehiculoController');
+//Route::resource('Vehiculo','VehiculoController');
    
 
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

@@ -31,8 +31,9 @@ class VehiculoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
+        $request->user()->authorizeRoles('admin');
         return view('Vehiculo.create');
     }
 
@@ -72,7 +73,7 @@ class VehiculoController extends Controller
      */
     public function edit($id)
     {
-        $vehiculo = vehiculo::find($id);
+        $vehiculo = Vehiculo::find($id);
         return view('Vehiculo.edit', compact('vehiculos'));
     }
 
