@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\VehiculoFormRequest;
+use App\Http\Requests\TarifaFormRequest;
 use Illuminate\Support\Facades\Redirect;
+
 use Illuminate\Http\Request;
-use App\Vehiculo;
+use App\Tarifa;
 use Illuminate\Support\Facades\DB;
 
-class VehiculoController extends Controller
+class TarifaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,10 +20,12 @@ class VehiculoController extends Controller
     {
         if ($request) {
             $query = trim($request->get('searchText'));
-            $vehiculos = DB::table('vehiculos')->where('placa', 'LIKE', '%' . $query . '%')
-                ->orderBy('id', 'desc')
+            $tarifa = DB::table('tarifas as tv')
+                ->where('tv.estado', 'Activo')
                 ->paginate(5);
-            return view('Vehiculo.index', ["vehiculos" => $vehiculos, "searchText" => $query]);
+
+            //$tarifa =Tarifa::all();
+            return view('Tarifa.index', ["tarifa" => $tarifa, "searchText" => $query]);
         }
     }
 
@@ -33,8 +36,10 @@ class VehiculoController extends Controller
      */
     public function create()
     {
-        
-        return view('Vehiculo.create');
+        $tipo_vehiculo = DB::table('tipo_vehiculos')
+            ->select('tipo_vehiculos.nombre', 'tipo_vehiculos.id')
+            ->get();
+        return view('tarifa.create')->with('tipo_vehiculo', $tipo_vehiculo);
     }
 
     /**
@@ -43,14 +48,14 @@ class VehiculoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(VehiculoFormRequest $request)
+    public function store(TarifaFormRequest $request)
     {
-        $vehiculo = new Vehiculo;
-        $vehiculo->placa = $request->get('placa');
-        $vehiculo->tipo = $request->get('tipo');
-        $vehiculo->modelo = $request->get('modelo');
-        $vehiculo->save();
-        return Redirect::to('Vehiculo');
+        $tarifa = new Tarifa;
+        $tarifa->tipo_vehiculo_id = $request->get('tipo_vehiculo_id');
+        $tarifa->valor = $request->get('valor');
+        $tarifa->estado = $request->get('estado');
+        $tarifa->save();
+        return Redirect::to('tarifa');
     }
 
     /**
@@ -61,8 +66,7 @@ class VehiculoController extends Controller
      */
     public function show($id)
     {
-        $vehiculos = Vehiculo::find($id);
-        return view('Vehiculo.show', compact('vehiculo'));
+        //
     }
 
     /**
@@ -73,8 +77,7 @@ class VehiculoController extends Controller
      */
     public function edit($id)
     {
-        $vehiculo = Vehiculo::find($id);
-        return view('Vehiculo.edit', compact('vehiculo'));
+        //
     }
 
     /**
@@ -86,9 +89,7 @@ class VehiculoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request, ['placa' => 'required', 'tipo' => 'required', 'modelo' => 'required']);
-        vehiculo::find($id)->update($request->all());
-        return redirect()->route('Vehiculo')->with('success', 'Registro actualizado');
+        //
     }
 
     /**
@@ -97,9 +98,12 @@ class VehiculoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        Vehiculo::find($id)->delete();
-        return redirect()->route('Vehiculo')->with('success', 'Registro Eliminado');
+        $request->user()->authorizeRoles('admin');
+
+        $tarifa = Tarifa::findOrFail($id);
+        $tarifa->estado = 'Inactivo';
+        $tarifa->update();
     }
 }

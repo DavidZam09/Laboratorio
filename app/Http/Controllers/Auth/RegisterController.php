@@ -8,7 +8,7 @@ use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use App\Roles;
+use App\Role;
 
 class RegisterController extends Controller
 {
@@ -30,7 +30,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = RouteServiceProvider::LOGIN;
 
     /**
      * Create a new controller instance.
@@ -72,7 +72,7 @@ class RegisterController extends Controller
         ]);
         $user
             ->roles()
-            ->attach(Roles::where('name', 'user')->first());
+            ->attach(Role::where('name', 'user')->first());
         return $user;
     }
 }

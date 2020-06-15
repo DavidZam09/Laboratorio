@@ -262,17 +262,18 @@ desired effect
                 <ul class="sidebar-menu" data-widget="tree">
                     <li class="header">HEADER</li>
                     <!-- Optionally, you can add icons to the links -->
-                    <li class="active"><a href="#"><i class="fa fa-link"></i> <span>Link</span></a></li>
-                    <li><a href="#"><i class="fa fa-link"></i> <span>Another Link</span></a></li>
+                    <li class="active"><a href="{{route('Vehiculo')}}"><i class="fa fa-link"></i> <span>Vehiculos</span></a></li>
+                    <li><a href="{{url('tarifa')}}"><i class="fa fa-link"></i> <span>Tarifas</span></a></li>
+                    <li><a href="{{url('ticket')}}"><i class="fa fa-link"></i> <span>Ticket</span></a></li>
                     <li class="treeview">
-                        <a href="#"><i class="fa fa-link"></i> <span>Multilevel</span>
+                        <a href="#"><i class="fa fa-link"></i> <span>Ingreso/Salida</span>
                             <span class="pull-right-container">
                                 <i class="fa fa-angle-left pull-right"></i>
                             </span>
                         </a>
                         <ul class="treeview-menu">
-                            <li><a href="#">Link in level 2</a></li>
-                            <li><a href="#">Link in level 2</a></li>
+                            <li><a href="{{url('ingresoV')}}">Ingreso Vehiculos</a></li>
+                            <li><a href="#">Salida Vehiculos</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -284,16 +285,7 @@ desired effect
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
-            <section class="content-header">
-                <h1>
-                    Page Header
-                    <small>Optional description</small>
-                </h1>
-                <ol class="breadcrumb">
-                    <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
-                    <li class="active">Here</li>
-                </ol>
-            </section>
+          
 
             <!-- Main content -->
             <section class="content container-fluid">

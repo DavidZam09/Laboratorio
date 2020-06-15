@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRoleUserTable extends Migration
+class CreateTipoVehiculosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class CreateRoleUserTable extends Migration
      */
     public function up()
     {
-        Schema::create('role_user', function (Blueprint $table) {
-            $table->bigincrements('id');
-            $table->integer('role_id')->unsigned();
-            $table->integer('user_id')->unsigned();
-            $table->timestamps();
+        Schema::create('tipo_vehiculos', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('nombre', 25);
+            $table->string('descripcion', 25)->nullable();
         });
     }
 
@@ -28,6 +27,6 @@ class CreateRoleUserTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('role_user');
+        Schema::dropIfExists('tipo_vehiculos');
     }
 }

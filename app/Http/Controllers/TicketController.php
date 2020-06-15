@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\VehiculoFormRequest;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Http\Request;
-use App\Vehiculo;
 use Illuminate\Support\Facades\DB;
+use App\Ticket;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 
-class VehiculoController extends Controller
+class TicketController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,10 +18,14 @@ class VehiculoController extends Controller
     {
         if ($request) {
             $query = trim($request->get('searchText'));
-            $vehiculos = DB::table('vehiculos')->where('placa', 'LIKE', '%' . $query . '%')
-                ->orderBy('id', 'desc')
-                ->paginate(5);
-            return view('Vehiculo.index', ["vehiculos" => $vehiculos, "searchText" => $query]);
+            $ticket = DB::table('vehiculos as v')
+                ->join('ingreso_vehiculos as i', 'i.vehiculo_id', '=', 'v.id')
+                ->SELECT('i.id', 'v.placa', 'tv.nombre', 'i.fecha_ingreso', 't.valor')
+                ->where('v.placa', 'LIKE', '%' . $query . '%')
+                ->where('t.estado', 1)
+                ->where('i.estado', 1)
+                ->paginate(10);
+            return view('ticket.index', ["ticket" => $ticket, "searchText" => $query]);
         }
     }
 
@@ -33,8 +36,7 @@ class VehiculoController extends Controller
      */
     public function create()
     {
-        
-        return view('Vehiculo.create');
+        //
     }
 
     /**
@@ -43,14 +45,9 @@ class VehiculoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(VehiculoFormRequest $request)
+    public function store(Request $request)
     {
-        $vehiculo = new Vehiculo;
-        $vehiculo->placa = $request->get('placa');
-        $vehiculo->tipo = $request->get('tipo');
-        $vehiculo->modelo = $request->get('modelo');
-        $vehiculo->save();
-        return Redirect::to('Vehiculo');
+        //
     }
 
     /**
@@ -61,8 +58,7 @@ class VehiculoController extends Controller
      */
     public function show($id)
     {
-        $vehiculos = Vehiculo::find($id);
-        return view('Vehiculo.show', compact('vehiculo'));
+        //
     }
 
     /**
@@ -73,8 +69,7 @@ class VehiculoController extends Controller
      */
     public function edit($id)
     {
-        $vehiculo = Vehiculo::find($id);
-        return view('Vehiculo.edit', compact('vehiculo'));
+        //
     }
 
     /**
@@ -86,9 +81,7 @@ class VehiculoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request, ['placa' => 'required', 'tipo' => 'required', 'modelo' => 'required']);
-        vehiculo::find($id)->update($request->all());
-        return redirect()->route('Vehiculo')->with('success', 'Registro actualizado');
+        //
     }
 
     /**
@@ -99,7 +92,6 @@ class VehiculoController extends Controller
      */
     public function destroy($id)
     {
-        Vehiculo::find($id)->delete();
-        return redirect()->route('Vehiculo')->with('success', 'Registro Eliminado');
+        //
     }
 }
